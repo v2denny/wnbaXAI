@@ -69,6 +69,7 @@ These modifications resulted in a cleaned and enhanced dataset, saved as `wnba_c
 - **Dimensionality Reduction**:
   - **PCA**: Highlighted separability challenges.
   - **t-SNE**: Revealed distinct clusters for successful vs. unsuccessful shots.
+<br>
 
   | Mutual Information (MI) | PCA |
   |:-------------:|:-----------:|
