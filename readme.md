@@ -7,8 +7,11 @@ This repository explores **Explainable Artificial Intelligence (XAI)** technique
 ## Table of Contents
 1. [Repository Structure](#repository-structure)
 2. [Exploratory Data Analysis (EDA) and Preprocessing](#exploratory-data-analysis-eda-and-preprocessing)
-3. [Repository Structure](#repository-structure)
-4. [Repository Structure](#repository-structure)
+3. [Pre-Modeling XAI](#pre-modeling-xai)
+4. [Glass-Box Models](#glass-box-models)
+5. [Black-Box Models](#black-box-models)
+6. [Key Findings](#key-findings)
+7. [How to Use](#how-to-use)
 
 
 ## Repository Structure
@@ -76,7 +79,7 @@ These modifications resulted in a cleaned and enhanced dataset, saved as `wnba_c
 <br>
 <br>
 
-## Glass-Box Models (In-Modeling XAI)
+## Glass-Box Models
 
 Interpretable models were trained to provide insights into decision-making processes:
 
@@ -94,7 +97,7 @@ Interpretable models were trained to provide insights into decision-making proce
 <br>
 <br>
 
-## Black-Box Models and Post-Modeling XAI
+## Black-Box Models
 
 Black-box models were trained for higher predictive power and analyzed using post-hoc XAI techniques:
 
