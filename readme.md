@@ -8,8 +8,8 @@ This repository explores **Explainable Artificial Intelligence (XAI)** technique
 1. [Repository Structure](#repository-structure)
 2. [Exploratory Data Analysis (EDA) and Preprocessing](#exploratory-data-analysis-eda-and-preprocessing)
 3. [Pre-Modeling XAI](#pre-modeling-xai)
-4. [Glass-Box Models](#glass-box-models)
-5. [Black-Box Models](#black-box-models)
+4. [In-Modeling (Glass-Box Models)](#in-modeling-glass-box-models)
+5. [Post-Modeling (Black-Box Models)](#post-modeling-black-box-models)
 6. [Key Findings](#key-findings)
 7. [How to Use](#how-to-use)
 8. [References](#references)
@@ -27,7 +27,7 @@ This repository explores **Explainable Artificial Intelligence (XAI)** technique
 │   ├── LinearModelsXAI.ipynb
 ├── black_box_models/
 │   ├── RandomForestXAI.ipynb
-│   ├── 
+│   ├── NeuralNetworkXAI.ipynb
 ```
 <br>
 <br>
@@ -55,7 +55,7 @@ For **Preprocessing**, the following steps were made:
 2. **Feature Engineering**:
    - Created a new **distance attribute**, calculated as the Euclidean distance from the shot location to the hoop.
    - Grouped similar shot types into broader categories (e.g., "Jump Shot," "Layup").
-   - Encoded non-numerical features (e.g., `shot type`, `shot group`) using Label Encoding, preserving ordinal distance relationships where applicable.
+   - Encoded non-numerical features (e.g., `shot type`, `shot group`) using Label Encoding, preserving ordinal relationships where applicable.
 
 These modifications resulted in a cleaned and enhanced dataset, saved as `wnba_clean.csv`, which serves as the foundation for subsequent modeling and analysis.
 <br>
@@ -63,65 +63,118 @@ These modifications resulted in a cleaned and enhanced dataset, saved as `wnba_c
 
 ## Pre-Modeling XAI
 
-- **Feature Correlation**:
-  - **Correlation Heatmap**: Gave interesting insights on feature relations.
-- **Feature Importance**:
-  - **Mutual Information (MI)**: Quantified feature relevance.
-  - **ANOVA F-Test**: Confirmed statistical significance of features.
-- **Dimensionality Reduction**:
-  - **PCA**: Highlighted separability challenges.
-  - **t-SNE**: Revealed distinct clusters for successful vs. unsuccessful shots.
+### Feature Importance
+
+- **Mutual Information (MI):**
+
+  MI was used to quantify the dependency between each feature and the target variable (shot success).
+  Top features ranked by MI included:
+    - **Distance**: Highest score, indicating a strong relationship with shot success.
+    - **Shot Type (Encoded)**: Highlighted the importance of different shot categories.
+    - **Coordinate Y**: Demonstrated the spatial impact on scoring likelihood.
+  - Results confirmed that distance and shot type were key predictors.
+
+- **ANOVA F-Test:**
+  - Performed to statistically evaluate feature relevance.
+  - Standard scaling was applied to normalize feature values.
+  - Significant features such as `distance` and `coordinates` exhibited high F-values (~3641.4) with p-values close to zero, supporting their predictive importance.
+<br>
+<br>
+
+### Dimensionality Reduction
+
+- **Principal Component Analysis (PCA):**
+  - Reduced the dataset to two principal components for visualization.
+  - Highlighted clusters but indicated challenges in separability between successful and unsuccessful shots in the reduced space.
+
+- **t-SNE:**
+  - Applied for nonlinear dimensionality reduction.
+  - Revealed more distinct regions corresponding to shot success and failure.
+  - Showed clearer separability than PCA, validating the relevance of selected features.
 <br>
 
   | Mutual Information (MI) | PCA |
   |:-------------:|:-----------:|
   | <img src="images/pre_mutualinfo.png" height="250"> | <img src="images/pre_pca.png" height="250"> |
 
+### Key Insights
 
-**Key insights:**
-- Features like shot type, distance, and spatial coordinates were the most informative.
+- **Top Features:** Distance, shot type/group, and spatial coordinates (x, y) emerged as the most informative predictors.
+- **Feature Relevance:** Both MI and ANOVA F-tests consistently identified critical features, aligning with domain knowledge of basketball analytics.
+- **Cluster Patterns:** Visualizations from t-SNE provided insights into the separability of successful vs. unsuccessful shots, emphasizing feature importance for modeling.
 <br>
 <br>
 
-## Glass-Box Models
+## In-Modeling (Glass-Box Models)
 
-Interpretable models were trained to provide insights into decision-making processes:
+Glass-box models were used to provide interpretable insights into the decision-making process:
 
 - **Linear Regression**:
-  - Identified coefficients to understand feature importance.
-  - Highlighted limitations in capturing complex relationships.
+  - Performance Metrics:
+    - Mean Squared Error (MSE): 0.22
+    - R² Score: 0.12
+  - Coefficients highlighted the importance of shot group and type, but the model struggled with non-linear patterns.
+  - Residual analysis indicated systematic errors.
 
-- **Generalized Additive Models (GAM)**:
-  - Captured non-linear dependencies while maintaining interpretability.
-  - Partial Dependence Plots (PDPs) demonstrated feature influence.
+- **Generalized Additive Models (GAM):**
+  - Enhanced interpretability by capturing non-linear relationships.
+  - Partial Dependence Plots (PDPs) revealed the influence of features like distance and coordinates.
 
 - **Decision Trees**:
-  - Offered a balance between performance and interpretability.
-  - Visualized decision pathways, emphasizing spatial features like distance and coordinate y.
+  - Performance:
+    - Accuracy: 67%
+  - The tree structure visualized the importance of features like distance and coordinate y, providing clear decision thresholds.
 <br>
 <br>
 
-## Black-Box Models
+| Residuals | PDP | DT Visualization |
+|:-----------------------:|:---:|:-----:|
+| <img src="images/residuals_linear.png" height="200"> | <img src="images/gam_pdp.png" height="200"> | <img src="images/dt_visualization.png" height="200"> |
 
-Black-box models were trained for higher predictive power and analyzed using post-hoc XAI techniques:
+<br>
 
-- **Neural Networks (NN)** and **Random Forest (RF)**:
-  - Achieved better predictive performance but lacked intrinsic interpretability.
+## Post-Modeling (Black-Box Models)
 
-- **Post-Hoc XAI Techniques**:
-  - **Simplification-Based**: A surrogate Decision Tree was trained on RF predictions to approximate its behavior, achieving a moderate agreement rate.
-  - **Feature-Based**:
-    - **SHAP**: Quantified the global and local feature importance for RF.
-    - **Permutation Importance**: Highlighted the most impactful features.
-  - **Example-Based**: Counterfactual explanations revealed what changes would flip a prediction.
+Black-box models were trained to maximize predictive performance and analyzed using post-hoc XAI techniques:
+
+- **Neural Networks (NN):**
+  - High accuracy achieved by leveraging complex feature interactions.
+
+- **Random Forest (RF):**
+  - Robust performance, effectively handling non-linear and interactive effects.
+
+<br>
+<br>
+
+**Post-hoc XAI techniques applied:**
+
+- **Simplification-Based**:
+  - A surrogate Decision Tree was trained on RF predictions, providing a simplified global explanation of its behavior.
+  - Agreement Rate: 0.66, highlighting approximation limitations.
+
+- **Feature-Based**:
+  - **SHAP (SHapley Additive Explanations):** Quantified global and local feature importance.
+    - Distance and coordinate y were the most impactful features globally.
+
+  - **Permutation Importance:** Identified top contributing features for model predictions.
+
+- **Example-Based**:
+  - Counterfactual explanations highlighted what changes could flip the model’s prediction for specific instances.
+
+<br>
+
+  | Mutual Information (MI) | PCA |
+  |:-------------:|:-----------:|
+  | <img src="images/surrogate.png" height="250"> | <img src="images/shap_rf.png" height="250"> |
+
 <br>
 <br>
 
 ## Key Findings
 
-- Glass-box models provided transparency but struggled with complex patterns.
-- Black-box models achieved higher accuracy, with post-hoc XAI techniques bridging the interpretability gap.
-- SHAP analysis uncovered new insights, such as the influence of time pressure on shot success.
+- Glass-box models like Decision Trees offered a balance of interpretability and performance, while GAM excelled in non-linear data scenarios.
+- Black-box models like RF and NN provided superior accuracy but required post-hoc techniques like SHAP for interpretability.
+- Combining in-model and post-modeling approaches allowed for both transparency and high performance.
 <br>
 <br>
 
