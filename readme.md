@@ -12,6 +12,7 @@ This repository explores **Explainable Artificial Intelligence (XAI)** technique
 5. [Black-Box Models](#black-box-models)
 6. [Key Findings](#key-findings)
 7. [How to Use](#how-to-use)
+8. [References](#references)
 
 
 ## Repository Structure
