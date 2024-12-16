@@ -1,2 +1,0 @@
-# wnbaXAI
-wnba XAU
