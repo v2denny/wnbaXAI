@@ -55,7 +55,7 @@ For **Preprocessing**, the following steps were made:
 2. **Feature Engineering**:
    - Created a new **distance attribute**, calculated as the Euclidean distance from the shot location to the hoop.
    - Grouped similar shot types into broader categories (e.g., "Jump Shot," "Layup").
-   - Encoded non-numerical features (e.g., `shot type`, `shot group`) using Label Encoding, preserving ordinal relationships where applicable.
+   - Encoded non-numerical features (e.g., `shot type`, `shot group`) using Label Encoding, preserving ordinal distance relationships where applicable.
 
 These modifications resulted in a cleaned and enhanced dataset, saved as `wnba_clean.csv`, which serves as the foundation for subsequent modeling and analysis.
 <br>
@@ -63,6 +63,8 @@ These modifications resulted in a cleaned and enhanced dataset, saved as `wnba_c
 
 ## Pre-Modeling XAI
 
+- **Feature Correlation**:
+  - **Correlation Heatmap**: Gave interesting insights on feature relations.
 - **Feature Importance**:
   - **Mutual Information (MI)**: Quantified feature relevance.
   - **ANOVA F-Test**: Confirmed statistical significance of features.
