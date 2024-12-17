@@ -163,7 +163,7 @@ Black-box models were trained to maximize predictive performance and analyzed us
 
 <br>
 
-  | Mutual Information (MI) | PCA |
+  | Decision Tree | SHAP |
   |:-------------:|:-----------:|
   | <img src="images/surrogate.png" height="250"> | <img src="images/shap_rf.png" height="250"> |
 
